@@ -28,9 +28,9 @@ services:
     logging:
       driver: awslogs
       options:
-        awslogs-region: us-east-1              # Replace with your AWS region if different
-        awslogs-group: danswer-dev             # CloudWatch Log Group name
-        awslogs-stream: api_server             # Log Stream name for this service
+        awslogs-region: us-east-1
+        awslogs-group: onyx-dev
+        awslogs-stream: api_server
         awslogs-create-group: "true"
 
   background:
