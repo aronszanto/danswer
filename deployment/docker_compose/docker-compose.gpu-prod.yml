@@ -1,14 +1,14 @@
 services:
   api_server:
-    image: danswer/danswer-backend:${IMAGE_TAG:-latest}
+    image: onyxdotapp/onyx-backend:${IMAGE_TAG:-latest}
     build:
       context: ../../backend
       dockerfile: Dockerfile
     command: >
       /bin/sh -c "
       alembic upgrade head &&
-      echo \"Starting Danswer Api Server\" &&
-      uvicorn danswer.main:app --host 0.0.0.0 --port 8080"
+      echo \"Starting Onyx Api Server\" &&
+      uvicorn onyx.main:app --host 0.0.0.0 --port 8080"
     depends_on:
       - relational_db
       - index
@@ -34,7 +34,7 @@ services:
         awslogs-create-group: "true"
 
   background:
-    image: danswer/danswer-backend:${IMAGE_TAG:-latest}
+    image: onyxdotapp/onyx-backend:${IMAGE_TAG:-latest}
     build:
       context: ../../backend
       dockerfile: Dockerfile
@@ -66,7 +66,7 @@ services:
       driver: awslogs
       options:
         awslogs-region: us-east-1
-        awslogs-group: danswer-dev
+        awslogs-group: riq-prod
         awslogs-stream: background
         awslogs-create-group: "true"
     # Uncomment the following lines if you need to include a custom CA certificate
@@ -74,7 +74,7 @@ services:
     #   - ${CA_CERT_PATH:-./custom-ca.crt}:/etc/ssl/certs/custom-ca.crt:ro
 
   web_server:
-    image: danswer/danswer-web-server:${IMAGE_TAG:-latest}
+    image: onyxdotapp/onyx-web-server:${IMAGE_TAG:-latest}
     build:
       context: ../../web
       dockerfile: Dockerfile
@@ -96,12 +96,12 @@ services:
       driver: awslogs
       options:
         awslogs-region: us-east-1
-        awslogs-group: danswer-dev
+        awslogs-group: riq-dev
         awslogs-stream: web_server
         awslogs-create-group: "true"
 
   inference_model_server:
-    image: danswer/danswer-model-server:${IMAGE_TAG:-latest}
+    image: onyxdotapp/onyx-model-server:${IMAGE_TAG:-latest}
     build:
       context: ../../backend
       dockerfile: Dockerfile.model_server
@@ -129,12 +129,12 @@ services:
       driver: awslogs
       options:
         awslogs-region: us-east-1
-        awslogs-group: danswer-dev
+        awslogs-group: riq-prod
         awslogs-stream: inference_model_server
         awslogs-create-group: "true"
 
   indexing_model_server:
-    image: danswer/danswer-model-server:${IMAGE_TAG:-latest}
+    image: onyxdotapp/onyx-model-server:${IMAGE_TAG:-latest}
     build:
       context: ../../backend
       dockerfile: Dockerfile.model_server
@@ -164,7 +164,7 @@ services:
       driver: awslogs
       options:
         awslogs-region: us-east-1
-        awslogs-group: danswer-dev
+        awslogs-group: riq-prod
         awslogs-stream: indexing_model_server
         awslogs-create-group: "true"
 
@@ -180,7 +180,7 @@ services:
       driver: awslogs
       options:
         awslogs-region: us-east-1
-        awslogs-group: danswer-dev
+        awslogs-group: riq-prod
         awslogs-stream: relational_db
         awslogs-create-group: "true"
 
@@ -197,7 +197,7 @@ services:
       driver: awslogs
       options:
         awslogs-region: us-east-1
-        awslogs-group: danswer-dev
+        awslogs-group: riq-prod
         awslogs-stream: index
         awslogs-create-group: "true"
 
@@ -218,7 +218,7 @@ services:
       driver: awslogs
       options:
         awslogs-region: us-east-1
-        awslogs-group: danswer-dev
+        awslogs-group: riq-prod
         awslogs-stream: nginx
         awslogs-create-group: "true"
     command: >
@@ -237,7 +237,7 @@ services:
       driver: awslogs
       options:
         awslogs-region: us-east-1
-        awslogs-group: danswer-dev
+        awslogs-group: riq-prod
         awslogs-stream: certbot
         awslogs-create-group: "true"
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
@@ -252,7 +252,7 @@ services:
       driver: awslogs
       options:
         awslogs-region: us-east-1
-        awslogs-group: danswer-dev
+        awslogs-group: riq-prod
         awslogs-stream: cache
         awslogs-create-group: "true"
 
